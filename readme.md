@@ -1,9 +1,5 @@
 # Minesweeper Game - by rhaeyx
 
-## MVP:
-- Able to flag a box.
-- Able to "?" a box.
-- Click a box and reveal boxes with no numbers.
-- Gameover screen.
-- Timer.
-- 
+## Working but not finished.
+Rules:
+Blue is 1, Green is 2, Red is 3, Orange is 4, Purple is 5 and Brown is a bomb, Flags are yellow.
