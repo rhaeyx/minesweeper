@@ -7,7 +7,7 @@ from random import randint
 pygame.init()
 
 # GAME
-game = Game(4, 4, 25)
+game = Game(10, 10, 25)
 
 # Settings
 screenSize = game.screenSize
@@ -15,7 +15,7 @@ screen = pygame.display.set_mode(screenSize)
 pygame.display.set_caption("Minesweeeeep")
 grid = game.generateGrid()
 game.generateBoxes(grid)
-game.generateMines(1, grid)
+game.generateMines(10, grid)
 game.generateNumbers(grid)
 
 clock = pygame.time.Clock()

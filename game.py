@@ -3,6 +3,8 @@ import random
 from box import Box
 
 class Game:
+    FLAG_COUNTER = 0
+    MINE_COUNTER = 0
     GAMEOVER = False
     BG_COLOR = (255, 255, 255)
     BORDER_COLOR = (50,50 ,50)
@@ -51,6 +53,7 @@ class Game:
                 grid[row][box].boobed = True 
                 mines -= 1
 
+        self.MINE_COUNTER = mines
         return grid
 
     def getSurroundingBoxes(self, box, grid):
@@ -125,12 +128,10 @@ class Game:
         for row in grid:
             for box in row:
                 if box.isFlagged:
-                    print("FLAG")
                     color = self.FLAG_COLOR
                     pygame.draw.rect(screen, color, [box.x, box.y, self.pixels, self.pixels])
 
                 elif box.isRevealed:
-                    print("NOPE")
                     color = colors_dict[box.content]
                     pygame.draw.rect(screen, color, [box.x, box.y, self.pixels, self.pixels])
                 pygame.draw.rect(screen, self.BORDER_COLOR, [box.x, box.y, self.pixels, self.pixels], 2)
@@ -142,7 +143,6 @@ class Game:
 
     def revealSurroundingBoxes(self, box, grid):
         surroundingBoxes = self.getSurroundingBoxes(box, grid)
-        print([box.content for box in surroundingBoxes])
         for boxx in surroundingBoxes:
             if boxx.content == '0' and not boxx.beenChecked:
                 boxx.isRevealed = True
@@ -168,12 +168,35 @@ class Game:
         row = pos[1] // self.pixels
         col = pos[0] // self.pixels
         box = grid[row][col]
-        # If true, make it false and vice versa.
-        box.isFlagged = not box.isFlagged
+        # box.isFlagged = not box.isFlagged would work but i cant inc the counters
+        if box.isFlagged:
+            box.isFlagged = False
+            self.FLAG_COUNTER -= 1
+        else: 
+            box.isFlagged = True
+            self.FLAG_COUNTER += 1
 
+    def checkWin(self, grid, screen):
+        for row in grid:
+            for box in row:
+                if not box.isFlagged:
+                    if not box.isRevealed:
+                        return
+
+        for row in grid:
+            for box in row:
+                if box.content == 'X':
+                    if box.isFlagged:
+                        continue
+                else:
+                    if box.isFlagged:
+                        return
+        print("WINNNNNN")
+        
     def mainLoop(self, grid, screen):
         screen.fill(self.BG_COLOR)
         self.drawBoard(grid, screen)
+        self.checkWin(grid, screen)
 
 
 
